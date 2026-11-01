@@ -1,0 +1,52 @@
+.host-header {
+  display: flex;
+  height: 82px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(22px, 6vw, 88px);
+  border-bottom: 1px solid #eae7e1;
+  background: rgb(250 248 245 / 88%);
+}
+
+.host-header-logo {
+  display: inline-flex;
+  width: 72px;
+  height: 72px;
+}
+
+.host-header-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.host-header-context {
+  margin-right: auto;
+  margin-left: 18px;
+  color: #666a66;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.host-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .host-header {
+    height: 68px;
+    padding: 0 14px;
+  }
+
+  .host-header-logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .host-header-context {
+    margin-left: 10px;
+    font-size: 12px;
+  }
+}

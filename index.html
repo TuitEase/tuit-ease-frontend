@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TuitEase | Fill your class, get paid, and keep students showing up</title>
+  <meta name="description" content="Automate workshop bookings, Paystack payments, installment tracking, and polite WhatsApp reminders without chasing anyone. Built for hosts in Nigeria & Africa.">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TuitEase - Fill your class without chasing anyone">
+  <meta property="og:description" content="The stress-free class automation platform for workshop hosts, trainers, and tutors.">
+
+  <!-- Fonts: Plus Jakarta Sans + Fraunces Editorial Serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="/assets/tuitease-logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500;1,9..144,600;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            editorial: ['Fraunces', 'Georgia', 'serif'],
+          },
+          colors: {
+            terracotta: {
+              50: '#FDF0EC',
+              100: '#FCECE7',
+              500: '#DE6548',
+              600: '#C95337',
+              700: '#B24227',
+            },
+            canvas: '#FAF8F5',
+            ink: '#14171A',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: #FAF8F5;
+      color: #14171A;
+    }
+    .font-editorial {
+      font-family: 'Fraunces', Georgia, serif;
+      font-style: italic;
+    }
+    .bg-warm-canvas {
+      background-color: #FAF8F5;
+    }
+  </style>
+</head>
+<body class="bg-warm-canvas text-[#14171A] antialiased selection:bg-[#DE6548] selection:text-white">
+
+  <!-- ==================== 1. NAVBAR ==================== -->
+  <header class="sticky top-0 z-50 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200/70 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <a href="/" class="flex items-center group focus:outline-none" aria-label="TuitEase home" onclick="trackEvent('nav_logo_click')">
+        <img src="/assets/tuitease-logo.png" alt="" class="h-16 w-16 object-contain transition-transform group-hover:scale-105">
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-9 text-[15px] font-medium text-stone-600">
+        <a href="#how-it-works" class="hover:text-[#DE6548] transition-colors" onclick="trackEvent('nav_link_click', {target: 'how-it-works'})">How it works</a>
+        <a href="#features" class="hover:text-[#DE6548] transition-colors" onclick="trackEvent('nav_link_click', {target: 'features'})">Features</a>
+        <a href="#who-its-for" class="hover:text-[#DE6548] transition-colors" onclick="trackEvent('nav_link_click', {target: 'who-its-for'})">Who it's for</a>
+        <a href="#pricing" class="hover:text-[#DE6548] transition-colors" onclick="trackEvent('nav_link_click', {target: 'pricing'})">Pricing</a>
+        <a href="#faq" class="hover:text-[#DE6548] transition-colors" onclick="trackEvent('nav_link_click', {target: 'faq'})">FAQ</a>
+      </nav>
+
+      <!-- Desktop Action CTA -->
+      <div class="hidden md:flex items-center gap-4">
+        <a href="/signin/" class="px-3 py-2 text-sm font-semibold text-stone-600 hover:text-[#DE6548] transition-colors">
+          Sign in
+        </a>
+        <a href="/signup/" class="inline-flex items-center justify-center px-6 py-2.5 rounded-full font-bold text-sm text-white bg-[#14171A] hover:bg-black shadow-sm transition-all hover:scale-[1.02]">
+          Start free
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <div class="md:hidden flex items-center">
+        <button id="mobileMenuBtn" aria-label="Toggle navigation menu" class="p-2 rounded-lg text-stone-700 hover:text-black hover:bg-stone-200/50 focus:outline-none">
+          <svg class="w-6 h-6" id="hamburgerIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg class="w-6 h-6 hidden" id="closeIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileMenu" class="hidden md:hidden border-b border-stone-200 bg-[#FAF8F5] px-4 pt-3 pb-6 space-y-3">
+      <a href="#how-it-works" class="block py-2 text-base font-semibold text-stone-700 hover:text-[#DE6548]" onclick="toggleMobileMenu()">How it works</a>
+      <a href="#features" class="block py-2 text-base font-semibold text-stone-700 hover:text-[#DE6548]" onclick="toggleMobileMenu()">Features</a>
+      <a href="#who-its-for" class="block py-2 text-base font-semibold text-stone-700 hover:text-[#DE6548]" onclick="toggleMobileMenu()">Who it's for</a>
+      <a href="#pricing" class="block py-2 text-base font-semibold text-stone-700 hover:text-[#DE6548]" onclick="toggleMobileMenu()">Pricing</a>
+      <a href="#faq" class="block py-2 text-base font-semibold text-stone-700 hover:text-[#DE6548]" onclick="toggleMobileMenu()">FAQ</a>
+      <div class="pt-2">
+        <a href="/signin/" class="block w-full py-3 mb-2 rounded-full font-bold text-center text-[#14171A] border border-stone-300 hover:bg-stone-100">
+          Sign in
+        </a>
+        <a href="/signup/" onclick="toggleMobileMenu()" class="block w-full py-3 rounded-full font-bold text-center text-white bg-[#14171A] hover:bg-black shadow-md">
+          Start free
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 2. HERO SECTION ==================== -->
+  <section class="pt-10 pb-20 lg:pt-16 lg:pb-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        
+        <!-- Left Hero Copy -->
+        <div class="lg:col-span-7 text-left">
+          
+          <!-- Audience Pill Badge Matching Screenshot -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs sm:text-sm font-medium mb-6">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            For workshop hosts in Nigeria & across Africa
+          </div>
+
+          <!-- Hero Headline with Warm Editorial Italic Serif -->
+          <h1 class="text-4xl sm:text-5xl lg:text-[62px] font-extrabold text-[#14171A] tracking-tight leading-[1.08]">
+            Fill your class,<br />
+            get paid, and<br />
+            keep students<br />
+            showing up.<br />
+            <span class="font-editorial text-[#DE6548] font-medium tracking-normal text-[48px] sm:text-[60px] lg:text-[72px] block mt-1">
+              Without chasing anyone.
+            </span>
+          </h1>
+
+          <!-- Subheadline -->
+          <p class="mt-6 text-lg sm:text-xl text-stone-600 max-w-xl font-normal leading-relaxed">
+            TuitEase automates your bookings, Paystack payments, and automated WhatsApp reminders so you can focus on teaching.
+          </p>
+
+          <!-- CTAs -->
+          <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <a href="/signup/" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-bold text-base text-white bg-[#DE6548] hover:bg-[#c85337] shadow-lg shadow-[#DE6548]/25 hover:shadow-xl hover:shadow-[#DE6548]/35 hover:-translate-y-0.5 transition-all">
+              <span>Create your first class</span>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+
+            <a href="#how-it-works" onclick="trackEvent('hero_secondary_click')" class="inline-flex items-center justify-center px-7 py-4 rounded-xl font-bold text-base text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 shadow-sm transition-all">
+              See how it works
+            </a>
+          </div>
+
+          <!-- Trust Badges with Clean SVG Icons -->
+          <div class="mt-8 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs sm:text-sm text-stone-500 font-medium">
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-[#DE6548]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              No account needed for students
+            </div>
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-[#DE6548]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Works with WhatsApp
+            </div>
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-[#DE6548]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Direct Paystack settlement
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Exact Booking Mockup from Screenshot 1 -->
+        <div class="lg:col-span-5 relative">
+          
+          <!-- Floating Toast Notification on Left Edge -->
+          <div class="absolute -left-6 top-48 z-20 bg-white rounded-2xl shadow-xl border border-stone-100 p-3.5 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-[#14171A]">₦16,000 received</p>
+              <p class="text-[11px] text-stone-500">Amaka O. · matched</p>
+            </div>
+          </div>
+
+          <!-- Main Booking Card -->
+          <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-xl shadow-stone-900/5 border border-stone-200/90 relative z-10">
+            
+            <!-- Host Header -->
+            <div class="flex items-center justify-between pb-4 border-b border-stone-100">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-[#FCECE7] text-[#DE6548] font-bold flex items-center justify-center text-sm">
+                  T
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-[#14171A]">Tobi's Pottery Studio</h3>
+                  <p class="text-xs text-stone-500">Booking page</p>
+                </div>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-stone-100 text-stone-700">
+                4-week course
+              </span>
+            </div>
+
+            <!-- Warm Pottery Banner Picture -->
+            <div class="mt-4 rounded-2xl overflow-hidden relative h-36 bg-[#E8A593]/30 border border-stone-200/60">
+              <img 
+                src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=800&q=80" 
+                alt="Hands shaping clay in a pottery studio" 
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-3">
+                <span class="text-white text-xs font-semibold px-2.5 py-0.5 rounded-full bg-black/40 backdrop-blur-sm">
+                  Studio 4 · Yaba, Lagos
+                </span>
+              </div>
+            </div>
+
+            <!-- Title & Details -->
+            <div class="mt-4">
+              <h4 class="text-xl font-bold text-[#14171A]">Pottery for Beginners</h4>
+              
+              <div class="mt-3 space-y-2 text-xs text-stone-600">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-[#DE6548]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  <span>Starts Saturday, 10:00am</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-[#DE6548]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  <span>Yaba, Lagos · Studio 4</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-[#DE6548]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                  <span>12 seats · 9 taken</span>
+                </div>
+              </div>
+
+              <!-- Capacity Progress Bar -->
+              <div class="mt-3.5">
+                <div class="w-full bg-stone-100 rounded-full h-2 overflow-hidden">
+                  <div class="bg-[#DE6548] h-2 rounded-full" style="width: 75%"></div>
+                </div>
+                <div class="mt-1.5 flex justify-end">
+                  <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                    3 seats left
+                  </span>
+                </div>
+              </div>
+
+              <!-- Pricing Block -->
+              <div class="mt-4 pt-3 border-t border-stone-100">
+                <div class="flex items-baseline justify-between">
+                  <div>
+                    <span class="text-2xl font-extrabold text-[#14171A]">₦48,000</span>
+                    <p class="text-xs text-stone-500 mt-0.5">or 3 payments of ₦16,000</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reserve Seat Button -->
+              <div class="mt-5">
+                <div class="w-full py-3.5 rounded-xl font-bold text-sm text-center text-white bg-[#DE6548] shadow-md shadow-[#DE6548]/20">
+                  Reserve my seat
+                </div>
+                <p class="text-[11px] text-center text-stone-400 mt-2">No account needed</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 3. THE PROBLEM SECTION ==================== -->
+  <section class="py-20 bg-white border-y border-stone-200/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#DE6548] mb-2 block">The Struggle Every Host Knows</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#14171A] tracking-tight">
+          Hosting workshops should be exciting, not an administrative headache.
+        </h2>
+        <p class="mt-4 text-base sm:text-lg text-stone-600">
+          When you run your bookings manually through WhatsApp DMs and spreadsheets, your energy is drained before you even teach your first session.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Pain Point 1 -->
+        <div class="bg-[#FAF8F5] rounded-3xl p-8 border border-stone-200/80 hover:border-stone-300 transition-all">
+          <div class="w-12 h-12 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-[#14171A] mb-2">
+            "Half the people who promised to come never show up."
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            People get busy, forget, or ghost. Without automated seat confirmations and 24h reminders, 30% to 50% of your confirmed attendees turn into empty seats.
+          </p>
+        </div>
+
+        <!-- Pain Point 2 -->
+        <div class="bg-[#FAF8F5] rounded-3xl p-8 border border-stone-200/80 hover:border-stone-300 transition-all">
+          <div class="w-12 h-12 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-[#14171A] mb-2">
+            "I spend hours checking bank alerts and chasing balances."
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Searching banking apps for matching transaction references, verifying screenshots, and sending awkward follow-up DMs for installment payments is exhausting.
+          </p>
+        </div>
+
+        <!-- Pain Point 3 -->
+        <div class="bg-[#FAF8F5] rounded-3xl p-8 border border-stone-200/80 hover:border-stone-300 transition-all">
+          <div class="w-12 h-12 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-[#14171A] mb-2">
+            "My WhatsApp is completely flooded with repetitive queries."
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            "Is there still space?", "What is your account number?", "Where is the venue map?" You answer the same questions 40 times while important messages get lost.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 4. HOW IT WORKS ==================== -->
+  <section id="how-it-works" class="py-20 lg:py-28 bg-[#FAF8F5]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#DE6548] mb-2 block">How It Works</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#14171A] tracking-tight">
+          From idea to a full class in three simple steps.
+        </h2>
+        <p class="mt-4 text-stone-600 text-base sm:text-lg">
+          No coding, no website to build, and no complicated setup. Everything is ready in under 2 minutes.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Step 1 -->
+        <div class="bg-white rounded-3xl p-8 border border-stone-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-[#FDF0EC] text-[#DE6548] font-black text-xl flex items-center justify-center mb-6">
+              1
+            </div>
+            <h3 class="text-xl font-bold text-[#14171A] mb-3">Create your class</h3>
+            <p class="text-stone-600 text-sm leading-relaxed">
+              Enter your class title, ticket price, seat limit, and schedule. Choose online (Zoom/Meet), offline (venue address & map), or hybrid.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-stone-100 text-xs font-semibold text-[#DE6548] flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Optional: Enable 2 or 3 installment splits
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white rounded-3xl p-8 border border-stone-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-[#FDF0EC] text-[#DE6548] font-black text-xl flex items-center justify-center mb-6">
+              2
+            </div>
+            <h3 class="text-xl font-bold text-[#14171A] mb-3">Share your booking link</h3>
+            <p class="text-stone-600 text-sm leading-relaxed">
+              Drop your clean, mobile-optimized link into your WhatsApp status, Instagram bio, or community groups. Students book in 30 seconds without creating an account.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-stone-100 text-xs font-semibold text-[#DE6548] flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Automatic seat locking prevents overselling
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white rounded-3xl p-8 border border-stone-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-[#FDF0EC] text-[#DE6548] font-black text-xl flex items-center justify-center mb-6">
+              3
+            </div>
+            <h3 class="text-xl font-bold text-[#14171A] mb-3">We handle the rest</h3>
+            <p class="text-stone-600 text-sm leading-relaxed">
+              TuitEase collects funds directly to your bank account via Paystack, sends booking confirmations, chases installments, and sends WhatsApp reminders before class.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-stone-100 text-xs font-semibold text-[#DE6548] flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Get a 7:00 AM WhatsApp summary every morning
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 5. FEATURES ==================== -->
+  <section id="features" class="py-20 lg:py-28 bg-white border-y border-stone-200/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#DE6548] mb-2 block">Built For Turnout</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#14171A] tracking-tight">
+          Everything you need to keep students showing up.
+        </h2>
+        <p class="mt-4 text-stone-600 text-base sm:text-lg">
+          Designed specifically around the daily habits of African students and workshop hosts.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Feature 1 -->
+        <div class="p-8 rounded-3xl bg-[#FAF8F5] border border-stone-200/80 hover:border-stone-300 transition-all">
+          <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-5">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-[#14171A] mb-2">
+            WhatsApp & SMS reminders that students actually act on
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Emails get buried in spam. TuitEase sends personal reminders directly via WhatsApp (with automatic SMS fallback) so students never miss a session.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="p-8 rounded-3xl bg-[#FAF8F5] border border-stone-200/80 hover:border-stone-300 transition-all">
+          <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-5">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-[#14171A] mb-2">
+            Confirm-your-seat nudges & automatic waitlist
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            3 days before class, students receive a prompt: "Reply YES to confirm your seat." If an unpaid student drops out, the seat automatically passes to the waitlist.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="p-8 rounded-3xl bg-[#FAF8F5] border border-stone-200/80 hover:border-stone-300 transition-all">
+          <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-5">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-[#14171A] mb-2">
+            Installments with automatic polite follow-ups
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Higher-ticket classes fill up faster when students can split payments. TuitEase manages due dates and sends friendly payment nudges with instant 1-click Paystack links.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="p-8 rounded-3xl bg-[#FAF8F5] border border-stone-200/80 hover:border-stone-300 transition-all">
+          <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-5">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-[#14171A] mb-2">
+            Bank transfer proof matching & manual logs
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Have students who prefer manual bank transfer? Mark them as paid in one click. TuitEase updates their balance, clears their installment, and issues an instant receipt.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="p-8 rounded-3xl bg-[#FAF8F5] border border-stone-200/80 hover:border-stone-300 transition-all">
+          <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-5">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-[#14171A] mb-2">
+            Multi-week sessions & attendance tracking
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Running a 4-week cohort? Track attendance per session in seconds. Automatically send "Sorry you missed Session 2" catch-up messages with replay links to absentees.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="p-8 rounded-3xl bg-[#FAF8F5] border border-stone-200/80 hover:border-stone-300 transition-all">
+          <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-5">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-[#14171A] mb-2">
+            Online and offline venue support
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Works equally well for Zoom webinars or in-person workshops. Include Google Maps links, parking instructions, and studio check-in codes in confirmations.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Feature 7: Host 7 AM Daily Briefing -->
+      <div class="mt-8 p-8 sm:p-10 rounded-3xl bg-[#14171A] text-white shadow-xl relative overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7">
+            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#DE6548]/20 text-[#DE6548] border border-[#DE6548]/30">
+              Daily Copilot
+            </span>
+            <h3 class="text-2xl sm:text-3xl font-extrabold mt-3 text-white">
+              Your 7:00 AM WhatsApp Morning Briefing
+            </h3>
+            <p class="mt-3 text-stone-300 text-sm sm:text-base leading-relaxed">
+              Wake up to an intelligent digest delivered straight to your WhatsApp. See exactly how much was paid overnight, who settled their installment, and which students need a quick nudge.
+            </p>
+            <ul class="mt-4 space-y-2 text-xs sm:text-sm text-stone-300">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#DE6548]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>Total workshop payments received in the last 24 hours</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#DE6548]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>At-risk students who haven't confirmed their seat</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#DE6548]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>Total outstanding balances across active cohorts</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="lg:col-span-5 bg-[#0b141a] p-5 rounded-2xl border border-stone-800 text-xs text-stone-300 shadow-inner">
+            <div class="text-[#DE6548] font-bold mb-2 flex items-center justify-between border-b border-stone-800 pb-2">
+              <span>TuitEase Host Copilot</span>
+              <span class="text-[10px] text-stone-500">07:00 WAT</span>
+            </div>
+            <div class="space-y-1.5 text-[11px] leading-relaxed">
+              <p>Good morning Tobi! Here's your summary for Pottery Studio:</p>
+              <p class="text-white font-semibold">₦96,000 received in last 24h</p>
+              <p class="text-stone-400">Still outstanding: ₦32,000</p>
+              <p class="text-stone-400">Next class: Tomorrow, 10:00am</p>
+              <div class="mt-2 pt-2 border-t border-stone-800">
+                <p class="text-amber-300 font-semibold">2 students at-risk of no-show:</p>
+                <p>· Chidi O. (has not confirmed seat)</p>
+                <p>· Bola M. (owes ₦16,000 installment)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 6. BEFORE AND AFTER ==================== -->
+  <section class="py-20 lg:py-28 bg-[#FAF8F5]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#DE6548] mb-2 block">The Transformation</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#14171A] tracking-tight">
+          Life before TuitEase vs. Life with TuitEase
+        </h2>
+        <p class="mt-4 text-stone-600 text-base sm:text-lg">
+          See the difference when you automate the tedious manual operations.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        
+        <!-- Before -->
+        <div class="bg-white rounded-3xl p-8 border border-stone-200/80 shadow-sm">
+          <div class="flex items-center gap-2.5 text-stone-400 font-extrabold text-lg mb-6">
+            <div class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-xs font-bold text-stone-500">
+              ✕
+            </div>
+            Without TuitEase
+          </div>
+          <ul class="space-y-4 text-sm text-stone-600">
+            <li class="flex items-start gap-3">
+              <span class="text-stone-400 font-bold">✕</span>
+              <span>Sending personal account numbers in DMs and hunting for payment alerts.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-stone-400 font-bold">✕</span>
+              <span>40% of people who "booked" don't show up on workshop morning.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-stone-400 font-bold">✕</span>
+              <span>Manually messaging each student on Friday night to confirm attendance.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-stone-400 font-bold">✕</span>
+              <span>Awkwardly chasing students for their second installment payment.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-stone-400 font-bold">✕</span>
+              <span>Overselling seats by mistake when 3 people transfer money at the same time.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- After -->
+        <div class="bg-white rounded-3xl p-8 border-2 border-[#DE6548] shadow-lg shadow-[#DE6548]/5">
+          <div class="flex items-center gap-2.5 text-[#DE6548] font-extrabold text-lg mb-6">
+            <div class="w-8 h-8 rounded-full bg-[#FDF0EC] flex items-center justify-center text-xs font-bold text-[#DE6548]">
+              ✓
+            </div>
+            With TuitEase
+          </div>
+          <ul class="space-y-4 text-sm text-[#14171A]">
+            <li class="flex items-start gap-3">
+              <span class="text-[#DE6548] font-bold">✓</span>
+              <span>Clean public booking page where students pay securely via Paystack in 30 seconds.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-[#DE6548] font-bold">✓</span>
+              <span>90%+ turnout with automated WhatsApp "Reply YES" seat confirmations.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-[#DE6548] font-bold">✓</span>
+              <span>TuitEase sends all reminders, Zoom links, and venue directions automatically.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-[#DE6548] font-bold">✓</span>
+              <span>Installment reminders chased politely on schedule with 1-click pay links.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-[#DE6548] font-bold">✓</span>
+              <span>Automatic capacity locking & waitlist promotion the moment a seat opens.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 7. WHO IT'S FOR (Exact Match to Screenshot 2) ==================== -->
+  <section id="who-its-for" class="py-20 lg:py-28 bg-[#FAF8F5] border-t border-stone-200/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header from Screenshot 2 -->
+      <div class="max-w-3xl mb-14 text-left">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#DE6548] mb-3 block">
+          WHO IT'S FOR
+        </span>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#14171A] tracking-tight leading-tight">
+          If you host people to teach<br class="hidden sm:inline" />
+          them something, this is for you.
+        </h2>
+        <p class="mt-4 text-stone-600 text-base sm:text-lg">
+          Built with hosts who run real classes — not with enterprise teams.
+        </p>
+      </div>
+
+      <!-- 5 Cards Matching Screenshot 2 Exactly -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+        
+        <!-- Card 1: Trainers & coaches -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200/90 shadow-sm flex flex-col justify-between hover:border-stone-300 transition-all">
+          <div>
+            <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-6">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-[#14171A] mb-2 leading-snug">
+              Trainers &amp;<br />coaches
+            </h3>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              Cohort courses, bootcamps and certification programmes with installments and weekly sessions.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2: Tutors & study groups -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200/90 shadow-sm flex flex-col justify-between hover:border-stone-300 transition-all">
+          <div>
+            <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-6">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-[#14171A] mb-2 leading-snug">
+              Tutors &amp;<br />study groups
+            </h3>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              Holiday lessons, exam prep and small classes where every seat and every payment counts.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Fitness & wellness -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200/90 shadow-sm flex flex-col justify-between hover:border-stone-300 transition-all">
+          <div>
+            <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-6">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-[#14171A] mb-2 leading-snug">
+              Fitness &amp;<br />wellness
+            </h3>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              Studio classes, yoga and dance sessions with repeat bookings and no-show tracking.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4: Creative classes -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200/90 shadow-sm flex flex-col justify-between hover:border-stone-300 transition-all">
+          <div>
+            <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-6">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4 5 5 0 015-5c1.1 0 2.1.4 2.8 1.1l2.2-2.2C11.5 9.4 10 7.8 10 6a6 6 0 1112 0c0 2.2-1.5 4.1-3.6 4.7l-4.4 4.4c.1.3.1.6.1.9a4 4 0 01-4 4z" />
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-[#14171A] mb-2 leading-snug">
+              Creative<br />classes
+            </h3>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              Pottery, sewing, photography and art workshops where materials are paid for up front.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 5: Community hosts -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200/90 shadow-sm flex flex-col justify-between hover:border-stone-300 transition-all">
+          <div>
+            <div class="w-11 h-11 rounded-2xl bg-[#FDF0EC] text-[#DE6548] flex items-center justify-center mb-6">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-[#14171A] mb-2 leading-snug">
+              Community<br />hosts
+            </h3>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              Church groups, book clubs and meetups where the same people come back every month.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 8. SOCIAL PROOF & TESTIMONIALS (With Warm Photos) ==================== -->
+  <section class="py-20 lg:py-28 bg-white border-y border-stone-200/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Stats Strip -->
+      <div class="p-8 sm:p-10 rounded-3xl bg-[#14171A] text-white shadow-xl mb-16">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-stone-800">
+          <div class="pt-4 md:pt-0">
+            <div class="text-3xl sm:text-4xl font-extrabold text-[#DE6548]">[ADD REAL STAT: 92%]</div>
+            <p class="mt-1 text-xs sm:text-sm text-stone-300 font-medium">Average class turnout rate</p>
+          </div>
+          <div class="pt-4 md:pt-0 md:pl-6">
+            <div class="text-3xl sm:text-4xl font-extrabold text-[#DE6548]">[ADD REAL STAT: ₦45M+]</div>
+            <p class="mt-1 text-xs sm:text-sm text-stone-300 font-medium">Collected via Paystack</p>
+          </div>
+          <div class="pt-4 md:pt-0 md:pl-6">
+            <div class="text-3xl sm:text-4xl font-extrabold text-[#DE6548]">0 Hours</div>
+            <p class="mt-1 text-xs sm:text-sm text-stone-300 font-medium">Chasing bank alerts</p>
+          </div>
+          <div class="pt-4 md:pt-0 md:pl-6">
+            <div class="text-3xl sm:text-4xl font-extrabold text-[#DE6548]">[ADD REAL STAT: 180+]</div>
+            <p class="mt-1 text-xs sm:text-sm text-stone-300 font-medium">Workshops hosted this month</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonials with Warm Host Portraits -->
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-[#14171A]">
+          Loved by workshop hosts across Africa
+        </h3>
+        <p class="text-stone-600 text-sm mt-2">Here is what organizers say about switching to TuitEase.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Testimonial 1 -->
+        <div class="bg-[#FAF8F5] p-8 rounded-3xl border border-stone-200/90 shadow-sm flex flex-col justify-between">
+          <p class="text-sm text-stone-700 leading-relaxed">
+            "[ADD REAL TESTIMONIAL: For my 3-week design sprint, 24 people signed up and every single one showed up. The WhatsApp confirmation where they reply YES completely fixed my no-show problem.]"
+          </p>
+          <div class="mt-6 flex items-center gap-3.5 pt-4 border-t border-stone-200/70">
+            <img 
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" 
+              alt="Tunde Adebayo" 
+              class="w-11 h-11 rounded-full object-cover"
+            />
+            <div>
+              <h4 class="text-sm font-bold text-[#14171A]">Tunde Adebayo</h4>
+              <p class="text-xs text-stone-500">Product Design Trainer · Lagos</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="bg-[#FAF8F5] p-8 rounded-3xl border border-stone-200/90 shadow-sm flex flex-col justify-between">
+          <p class="text-sm text-stone-700 leading-relaxed">
+            "[ADD REAL TESTIMONIAL: Being able to offer 2 installments without having to set calendar alarms to chase people was a gamechanger. TuitEase handled the reminders and the money went straight to my account.]"
+          </p>
+          <div class="mt-6 flex items-center gap-3.5 pt-4 border-t border-stone-200/70">
+            <img 
+              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" 
+              alt="Ngozi Okonjo" 
+              class="w-11 h-11 rounded-full object-cover"
+            />
+            <div>
+              <h4 class="text-sm font-bold text-[#14171A]">Ngozi Okonjo</h4>
+              <p class="text-xs text-stone-500">Pastry Chef & Academy Host · Abuja</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="bg-[#FAF8F5] p-8 rounded-3xl border border-stone-200/90 shadow-sm flex flex-col justify-between">
+          <p class="text-sm text-stone-700 leading-relaxed">
+            "[ADD REAL TESTIMONIAL: The 7 AM WhatsApp briefing is my favorite thing. I wake up, see who paid overnight, and know exactly who hasn't confirmed without opening any laptop.]"
+          </p>
+          <div class="mt-6 flex items-center gap-3.5 pt-4 border-t border-stone-200/70">
+            <img 
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" 
+              alt="Tobi Adeleke" 
+              class="w-11 h-11 rounded-full object-cover"
+            />
+            <div>
+              <h4 class="text-sm font-bold text-[#14171A]">Tobi Adeleke</h4>
+              <p class="text-xs text-stone-500">Ceramics Studio Host · Yaba</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 9. PRICING ==================== -->
+  <section id="pricing" class="py-16 sm:py-20 lg:py-28 bg-[#F8F6F2]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#E0674A] mb-2 block">Simple Pricing</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#16161A] tracking-tight">
+          Free to start. Pay only when you get paid.
+        </h2>
+        <p class="mt-4 text-[#6B6560] text-base sm:text-lg">
+          No monthly subscription. Free classes are free forever, and paid classes pay as you go.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch max-w-4xl mx-auto">
+
+        <!-- Free classes -->
+        <article class="rounded-[28px] bg-white border border-[#E6E1D8] p-6 sm:p-8 lg:p-10 flex flex-col">
+          <div>
+            <span class="inline-block px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#F1EEE8] text-[#5F5A52]">
+              Community &amp; free events
+            </span>
+            <h3 class="mt-5 text-2xl sm:text-3xl font-extrabold text-[#16161A] tracking-tight">Free classes</h3>
+            <p class="mt-2 text-sm sm:text-base leading-relaxed text-[#6B6560]">
+              For free workshops, meetups and community sessions of any size.
+            </p>
+
+            <div class="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <span class="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#16161A]">₦0</span>
+              <span class="text-base font-bold text-[#16161A]">forever</span>
+            </div>
+            <p class="mt-2 text-sm font-semibold text-[#E0674A]">No fee, no monthly subscription</p>
+          </div>
+
+          <ul class="mt-6 mb-8 flex-1 space-y-3 text-sm leading-relaxed text-[#3F3B37]">
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>100% free forever for free community events</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Unlimited classes &amp; students</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Booking page for every class</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>One confirmation with date, venue or meeting link</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Link to your WhatsApp group or channel</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Add to calendar button</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Attendance list &amp; CSV export</span>
+            </li>
+            <li class="flex items-start gap-3 text-[#9A948C]">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
+              <span>Automated reminders (paid classes only)</span>
+            </li>
+          </ul>
+
+          <a href="/classes/new/" class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl border border-[#D9D3C9] bg-[#FAF8F5] px-5 py-3 text-sm font-bold text-[#16161A] transition-colors hover:bg-[#F1EEE8] focus-visible:ring-[3px] focus-visible:ring-[#16161A] focus-visible:ring-offset-2">
+            Create a free class
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+        </article>
+
+        <!-- Paid classes -->
+        <article class="relative rounded-[28px] bg-white border-2 border-[#E0674A] p-6 sm:p-8 lg:p-10 flex flex-col shadow-[0_24px_60px_-28px_rgba(224,103,74,0.55)]">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <span class="inline-block px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wide bg-[#E0674A] text-white">
+                Full automation
+              </span>
+              <span class="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#E0674A]">Pay as you go</span>
+            </div>
+            <h3 class="mt-5 text-2xl sm:text-3xl font-extrabold text-[#16161A] tracking-tight">Paid classes</h3>
+            <p class="mt-2 text-sm sm:text-base leading-relaxed text-[#6B6560]">
+              For workshops, cohorts and trainings where students pay to join.
+            </p>
+
+            <div class="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <span class="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#16161A]"><span data-platform-fee>Platform fee</span></span>
+              <span class="text-sm font-semibold text-[#6B6560]">per paid student</span>
+            </div>
+            <p class="mt-2 text-sm font-semibold text-[#E0674A]">Deducted at payment, ₦0 a month</p>
+          </div>
+
+          <ul class="mt-6 mb-8 flex-1 space-y-3 text-sm leading-relaxed text-[#3F3B37]">
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="font-semibold text-[#16161A]">Students always pay exactly your listed price</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Everything in Free classes</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Automated WhatsApp &amp; SMS reminders</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Seat confirmation, day-before and hour-before reminders</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Instalment payment schedules with follow-ups</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Direct Paystack settlement to your bank</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#E0674A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>Waiting list &amp; daily 7:00 AM WhatsApp host briefing</span>
+            </li>
+          </ul>
+
+          <a href="/classes/new/" class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#E0674A] px-5 py-3 text-sm font-bold text-white shadow-md shadow-[#E0674A]/25 transition-colors hover:bg-[#C95337] focus-visible:ring-[3px] focus-visible:ring-[#16161A] focus-visible:ring-offset-2">
+            Create a paid class
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+        </article>
+
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="/pricing/" class="inline-flex min-h-[44px] items-center justify-center gap-2 py-2 text-sm font-bold text-[#16161A] transition-colors hover:text-[#E0674A] focus-visible:ring-[3px] focus-visible:ring-[#16161A] focus-visible:ring-offset-2" onclick="trackEvent('pricing_details_click')">
+          See the full fee breakdown
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 10. FAQ ==================== -->
+  <section id="faq" class="py-20 lg:py-28 bg-white border-y border-stone-200/70">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#DE6548] mb-2 block">FAQ</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#14171A] tracking-tight">
+          Frequently asked questions
+        </h2>
+        <p class="mt-4 text-stone-600 text-base">
+          Everything you need to know about hosting classes on TuitEase.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- Q1 -->
+        <div class="bg-[#FAF8F5] rounded-2xl border border-stone-200/80 overflow-hidden">
+          <button class="faq-btn w-full p-6 text-left flex items-center justify-between font-bold text-[#14171A] text-base sm:text-lg focus:outline-none">
+            <span>Do my students need to download an app or create an account?</span>
+            <svg class="faq-icon w-5 h-5 text-stone-500 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-6 text-sm text-stone-600 leading-relaxed border-t border-stone-200/50 pt-3">
+            No! Students open your link, enter their name and phone number, and complete their booking. All confirmations and reminders arrive straight on their existing WhatsApp and SMS.
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="bg-[#FAF8F5] rounded-2xl border border-stone-200/80 overflow-hidden">
+          <button class="faq-btn w-full p-6 text-left flex items-center justify-between font-bold text-[#14171A] text-base sm:text-lg focus:outline-none">
+            <span>Which payment methods are supported?</span>
+            <svg class="faq-icon w-5 h-5 text-stone-500 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-6 text-sm text-stone-600 leading-relaxed border-t border-stone-200/50 pt-3">
+            We integrate with Paystack. Your students can pay with debit cards (Mastercard, Visa, Verve), bank transfers (instant virtual account), Apple Pay, or USSD. You can also manually record cash or offline transfers with one tap.
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="bg-[#FAF8F5] rounded-2xl border border-stone-200/80 overflow-hidden">
+          <button class="faq-btn w-full p-6 text-left flex items-center justify-between font-bold text-[#14171A] text-base sm:text-lg focus:outline-none">
+            <span>Can my students pay in installments?</span>
+            <svg class="faq-icon w-5 h-5 text-stone-500 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-6 text-sm text-stone-600 leading-relaxed border-t border-stone-200/50 pt-3">
+            Yes. When setting up a class, toggle on "Allow Installments" and choose 2 or 3 parts. TuitEase calculates the schedule and sends automated payment nudges on WhatsApp when installments are due.
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="bg-[#FAF8F5] rounded-2xl border border-stone-200/80 overflow-hidden">
+          <button class="faq-btn w-full p-6 text-left flex items-center justify-between font-bold text-[#14171A] text-base sm:text-lg focus:outline-none">
+            <span>Does it work for in-person / physical classes?</span>
+            <svg class="faq-icon w-5 h-5 text-stone-500 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-6 text-sm text-stone-600 leading-relaxed border-t border-stone-200/50 pt-3">
+            Yes! When creating a class, select "Offline" or "Hybrid". Add your venue address and a Google Maps link. All confirmations and day-before reminders automatically include the venue directions for your attendees.
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="bg-[#FAF8F5] rounded-2xl border border-stone-200/80 overflow-hidden">
+          <button class="faq-btn w-full p-6 text-left flex items-center justify-between font-bold text-[#14171A] text-base sm:text-lg focus:outline-none">
+            <span>Is my money safe and how do payouts work?</span>
+            <svg class="faq-icon w-5 h-5 text-stone-500 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-6 text-sm text-stone-600 leading-relaxed border-t border-stone-200/50 pt-3">
+            100% safe. We use Paystack Subaccounts. Your bank account details are verified directly through Paystack. When a student pays, the transaction splits automatically—your earnings land directly in your registered bank account. TuitEase never holds your money.
+          </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="bg-[#FAF8F5] rounded-2xl border border-stone-200/80 overflow-hidden">
+          <button class="faq-btn w-full p-6 text-left flex items-center justify-between font-bold text-[#14171A] text-base sm:text-lg focus:outline-none">
+            <span>How fast can I set up my first class?</span>
+            <svg class="faq-icon w-5 h-5 text-stone-500 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-6 text-sm text-stone-600 leading-relaxed border-t border-stone-200/50 pt-3">
+            Under 2 minutes. Enter your class title, price, seat capacity, and date. Your public link is generated instantly and ready to share in your WhatsApp bio.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 11. FINAL CTA ==================== -->
+  <section class="py-20 lg:py-28 bg-[#14171A] text-white text-center relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+        Ready to run your next workshop without the headaches?
+      </h2>
+      <p class="mt-6 text-lg sm:text-xl text-stone-300 max-w-2xl mx-auto font-normal">
+        Join hundreds of trainers, tutors, and coaches who fill their classes and get paid on autopilot.
+      </p>
+
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="/signup/" class="inline-block w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-base text-white bg-[#DE6548] hover:bg-[#c85337] shadow-xl transition-all">
+          Create your first class in 2 minutes
+        </a>
+      </div>
+
+      <p class="mt-6 text-xs sm:text-sm text-stone-400 font-medium">
+        No credit card required &nbsp;·&nbsp; Setup takes 2 minutes &nbsp;·&nbsp; Free for free classes
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== 12. FOOTER ==================== -->
+  <footer class="bg-[#0e1012] text-stone-400 py-16 text-sm border-t border-stone-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-stone-800">
+        
+        <!-- Brand -->
+        <div class="md:col-span-1">
+          <a href="/" class="inline-flex mb-4" aria-label="TuitEase home">
+            <img src="/assets/tuitease-logo.png" alt="" class="h-16 w-16 object-contain">
+          </a>
+          <p class="text-xs text-stone-400 leading-relaxed mb-4">
+            The stress-free class automation platform for workshop hosts, trainers, and tutors across Nigeria and Africa.
+          </p>
+          <p class="text-[11px] text-stone-500">
+            Built for African educators & creators.
+          </p>
+        </div>
+
+        <!-- Links -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4">Product</h4>
+          <ul class="space-y-2.5 text-xs">
+            <li><a href="#how-it-works" class="hover:text-white transition-colors">How it works</a></li>
+            <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>
+            <li><a href="#pricing" class="hover:text-white transition-colors">Pricing & Payouts</a></li>
+            <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4">Who it's for</h4>
+          <ul class="space-y-2.5 text-xs">
+            <li><a href="#who-its-for" class="hover:text-white transition-colors">Trainers & coaches</a></li>
+            <li><a href="#who-its-for" class="hover:text-white transition-colors">Tutors & study groups</a></li>
+            <li><a href="#who-its-for" class="hover:text-white transition-colors">Fitness & wellness</a></li>
+            <li><a href="#who-its-for" class="hover:text-white transition-colors">Creative classes</a></li>
+            <li><a href="#who-its-for" class="hover:text-white transition-colors">Community hosts</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4">Support & Trust</h4>
+          <ul class="space-y-2.5 text-xs">
+            <li><span>Support email coming soon</span></li>
+            <li><span>WhatsApp contact coming soon</span></li>
+            <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4">
+        <div>
+          &copy; 2026 TuitEase Inc. All rights reserved.
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-stone-300">Twitter / X</a>
+          <a href="#" class="hover:text-stone-300">LinkedIn</a>
+          <a href="#" class="hover:text-stone-300">Instagram</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    function trackEvent(eventName, payload = {}) {
+      console.log(`[TuitEase Analytics] "${eventName}"`, payload);
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const hamburger = document.getElementById('hamburgerIcon');
+      const close = document.getElementById('closeIcon');
+      const isHidden = menu.classList.contains('hidden');
+      
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        hamburger.classList.add('hidden');
+        close.classList.remove('hidden');
+        trackEvent('mobile_menu_open');
+      } else {
+        menu.classList.add('hidden');
+        hamburger.classList.remove('hidden');
+        close.classList.add('hidden');
+        trackEvent('mobile_menu_close');
+      }
+    }
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+
+    document.querySelectorAll('.faq-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.faq-icon');
+        const isOpen = !content.classList.contains('hidden');
+
+        document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+        document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('rotate-180'));
+
+        if (!isOpen) {
+          content.classList.remove('hidden');
+          icon.classList.add('rotate-180');
+          trackEvent('faq_opened', { question: button.innerText.trim() });
+        }
+      });
+    });
+  </script>
+
+  <script>
+    // The fee rate lives in the backend. Fill the marketing copy from the same
+    // public endpoint the /pricing/ page uses, so the landing page can never
+    // advertise a rate TuitEase does not charge.
+    (function () {
+      var nodes = document.querySelectorAll('[data-platform-fee]');
+      if (!nodes.length) return;
+      fetch('/api/public/pricing/', { headers: { Accept: 'application/json' } })
+        .then(function (response) {
+          return response.ok ? response.json() : null;
+        })
+        .then(function (body) {
+          if (!body || body.platform_percent === undefined) return;
+          var percent = Number.parseFloat(body.platform_percent);
+          if (!Number.isFinite(percent)) return;
+          nodes.forEach(function (node) {
+            node.textContent = percent + '%';
+          });
+        })
+        .catch(function () {
+          // Keep the neutral fallback copy when pricing cannot be loaded.
+        });
+    })();
+  </script>
+</body>
+</html>
