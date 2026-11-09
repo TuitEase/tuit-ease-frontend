@@ -96,7 +96,8 @@ describe('host onboarding', () => {
   });
 
   it('loads banks and submits payout details only after account validation', async () => {
-    render(<OnboardingPage />);
+    const onNavigate = vi.fn();
+    render(<OnboardingPage onNavigate={onNavigate} />);
     await screen.findByRole('heading', { name: 'Tell us about your classes' });
     fireEvent.change(screen.getByLabelText(/Business or host name/), { target: { value: 'Ada Learning' } });
     fireEvent.click(screen.getByRole('button', { name: /Save and continue/ }));
@@ -119,6 +120,6 @@ describe('host onboarding', () => {
     fireEvent.click(screen.getByRole('button', { name: /Connect payout account/ }));
 
     await waitFor(() => expect(api.setupHostPayout).toHaveBeenCalledWith('001', '0123456789'));
-    expect(await screen.findByText(/Paystack payout account connected/)).toBeInTheDocument();
+    await waitFor(() => expect(onNavigate).toHaveBeenCalledWith('/dashboard/'));
   });
 });

@@ -47,7 +47,11 @@ interface Preferences {
   daily_summary_enabled: boolean;
 }
 
-export default function OnboardingPage() {
+interface OnboardingPageProps {
+  onNavigate?: (path: string) => void;
+}
+
+export default function OnboardingPage({ onNavigate }: OnboardingPageProps = {}) {
   const [host, setHost] = useState<HostProfile | null>(null);
   const [profile, setProfile] = useState<ProfileValues>({
     business_name: '',
@@ -265,12 +269,14 @@ export default function OnboardingPage() {
       setAccountNumber('');
       setResolvedAccountName('');
       setAccountNameConfirmed(false);
-      setCompleted(true);
     } catch {
       setError('Payout setup could not be confirmed. Check the bank and account details, then try again.');
+      return;
     } finally {
       setSaving(false);
     }
+    if (onNavigate) onNavigate('/dashboard/');
+    else window.location.assign('/dashboard/');
   };
 
   const finishWithoutPayout = () => {
