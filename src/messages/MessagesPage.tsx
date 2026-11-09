@@ -236,7 +236,8 @@ export default function MessagesPage() {
   const announcementPreviewQuery = useQuery({
     queryKey: ['announcement-preview', announcementClassId, debouncedText],
     queryFn: () => fetchAnnouncementPreview(announcementClassId!, debouncedText),
-    enabled: hasAuthToken && announcementClassId !== null,
+    enabled: hasAuthToken && selectedAnnouncementClass !== null
+      && selectedAnnouncementClass.message_audience.students > 0,
   });
 
   useEffect(() => {
@@ -253,6 +254,9 @@ export default function MessagesPage() {
     ? selectedAnnouncementClass.message_audience.students + (includeWaitlist ? selectedAnnouncementClass.message_audience.waiting_list : 0)
     : 0;
   const overLimit = Boolean(summary && audienceCount > summary.messages_remaining);
+  const sentTodayPercent = summary && summary.daily_limit > 0
+    ? Math.max(0, Math.min((summary.sent_today / summary.daily_limit) * 100, 100))
+    : 0;
 
   const runIssueAction = async (issue: MessageIssue, action: 'retry' | 'handled') => {
     setActionId(issue.id);
@@ -335,21 +339,61 @@ export default function MessagesPage() {
             <div className="message-metric-skeleton" role="status">Loading message summary…</div>
           ) : summary ? (
             <>
-              <article className={`message-metric ${summary.needs_attention > 0 ? 'is-attention' : ''}`}>
-                <span>Needs attention</span><strong>{summary.needs_attention}</strong>
-                <small>{summary.needs_attention ? 'Open the first tab' : 'All clear'}</small>
+              <article className={`message-metric ${summary.needs_attention > 0 ? 'is-attention' : 'is-clear'}`}>
+                <div className="message-metric-top">
+                  <span className="message-metric-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M12 3 2.8 19a1.2 1.2 0 0 0 1 1.8h16.4a1.2 1.2 0 0 0 1-1.8L12 3Z" /><path d="M12 9v4m0 3h.01" /></svg>
+                  </span>
+                  <span className={`message-metric-status ${summary.needs_attention > 0 ? 'is-alert' : 'is-good'}`}>
+                    {summary.needs_attention > 0 ? 'Action needed' : 'All clear'}
+                  </span>
+                </div>
+                <span className="message-metric-label">Needs attention</span>
+                <strong>{summary.needs_attention}</strong>
+                <small>{summary.needs_attention ? 'Failed or fallback deliveries to review' : 'No delivery issues to review'}</small>
+              </article>
+              <article className="message-metric is-usage">
+                <div className="message-metric-top">
+                  <span className="message-metric-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z" /></svg>
+                  </span>
+                  <span className="message-metric-period">Today</span>
+                </div>
+                <span className="message-metric-label">Messages sent</span>
+                <strong>{summary.sent_today}<span className="message-metric-total"> / {summary.daily_limit}</span></strong>
+                <div
+                  className="message-metric-progress"
+                  role="progressbar"
+                  aria-label="Daily message limit used"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(sentTodayPercent)}
+                >
+                  <span style={{ width: `${sentTodayPercent}%` }} />
+                </div>
+                <small>{summary.messages_remaining} messages remaining today</small>
               </article>
               <article className="message-metric">
-                <span>Sent today</span><strong>{summary.sent_today} of {summary.daily_limit}</strong>
-                <small>WhatsApp messages sent</small>
+                <div className="message-metric-top">
+                  <span className="message-metric-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg>
+                  </span>
+                  <span className="message-metric-period">Last 30 days</span>
+                </div>
+                <span className="message-metric-label">Delivery rate</span>
+                <strong>{summary.sent_percent_30d}%</strong>
+                <small>{summary.delivery_metric_note}</small>
               </article>
               <article className="message-metric">
-                <span>Sent</span><strong>{summary.sent_percent_30d}%</strong>
-                <small>Last 30 days · {summary.delivery_metric_note}</small>
-              </article>
-              <article className="message-metric">
-                <span>Scheduled</span><strong>{summary.scheduled}</strong>
-                <small>Going out next</small>
+                <div className="message-metric-top">
+                  <span className="message-metric-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+                  </span>
+                  <span className="message-metric-period">Up next</span>
+                </div>
+                <span className="message-metric-label">Scheduled</span>
+                <strong>{summary.scheduled}</strong>
+                <small>Messages queued for delivery</small>
               </article>
             </>
           ) : null}
@@ -442,6 +486,11 @@ export default function MessagesPage() {
                     ))}
                   </select>
                   {!liveClasses.length && <small>Announcements are available for live classes only.</small>}
+                  {selectedAnnouncementClass?.message_audience.students === 0 && (
+                    <p className="messages-no-audience" role="status">
+                      This class has no active students, so an announcement cannot be sent.
+                    </p>
+                  )}
                 </div>
                 <div className="messages-field">
                   <label htmlFor="announcement-text">Your message</label>

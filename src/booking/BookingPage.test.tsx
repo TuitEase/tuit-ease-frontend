@@ -73,6 +73,21 @@ describe('BookingPage', () => {
     window.localStorage.clear();
   });
 
+  it('shows the brand logo alongside the class host', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(jsonResponse(publicClass()));
+
+    render(<BookingPage />);
+
+    expect(await screen.findByRole('heading', { name: 'Pottery for Beginners' })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'TuitEase' })).toBeInTheDocument();
+    expect(screen.getByText('YOUR CLASS HOST')).toBeInTheDocument();
+    expect(screen.getByText('Ada Codes')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Share this class' }));
+    expect(screen.getByRole('region', { name: 'Share this class' })).toBeInTheDocument();
+    expect(screen.getByText('Scan to book')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'More' })).toBeInTheDocument();
+  });
+
   it('books a free class in one step and shows the confirmation', async () => {
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
       if (init?.method === 'POST') {

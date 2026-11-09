@@ -105,10 +105,11 @@ describe('host dashboard', () => {
     expect(await screen.findByRole('heading', { name: /Good (morning|afternoon|evening), Ada/i })).toBeInTheDocument();
     expect(await screen.findByText('Add your payout account to start receiving money')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'TuitEase dashboard' })).toHaveAttribute('href', '/dashboard/');
+    expect(screen.getByRole('img', { name: 'TuitEase main logo' })).toHaveAttribute('src', '/assets/tuitease-logo.png');
     expect(screen.getByRole('navigation', { name: 'Primary navigation' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('aria-current', 'page');
-    expect(screen.getByRole('link', { name: 'Messages' })).toHaveAttribute('href', '/dashboard/#dashboard-top');
-    expect(screen.getByRole('link', { name: 'Payments' })).toHaveAttribute('href', '/dashboard/#payments');
+    expect(screen.getByRole('link', { name: 'Messages' })).toHaveAttribute('href', '/messages/');
+    expect(screen.getByRole('link', { name: 'Payments' })).toHaveAttribute('href', '/payments/');
     expect(screen.getByRole('button', { name: 'Log out' })).toBeInTheDocument();
     expect(screen.getByText('₦385,000')).toBeInTheDocument();
     expect(screen.getByText('Who may not show up')).toBeInTheDocument();

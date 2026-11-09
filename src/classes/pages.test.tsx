@@ -183,6 +183,68 @@ describe('classes pages', () => {
     expect(api.fetchPayments).not.toHaveBeenCalled();
   });
 
+  it('uses payment class and booking IDs to show and remind the right class instalment', async () => {
+    window.history.replaceState(null, '', '/classes/detail/?id=4');
+    api.fetchPayments.mockResolvedValue(
+      page([
+        {
+          id: 21,
+          booking_id: 31,
+          class_id: 4,
+          amount: '5000',
+          status: 'success',
+          method: 'paystack',
+          reference: 'this-class-payment',
+          paid_at: '2026-11-02T10:00:00Z',
+          student_name: 'Tolu Kareem',
+          class_name: 'Python for Beginners',
+        },
+        {
+          id: 22,
+          booking_id: 32,
+          class_id: 5,
+          amount: '9000',
+          status: 'success',
+          method: 'paystack',
+          reference: 'other-class-payment',
+          paid_at: '2026-11-02T10:00:00Z',
+          student_name: 'Tolu Kareem',
+          class_name: 'Python for Beginners',
+        },
+      ]),
+    );
+    api.fetchPendingInstallments.mockResolvedValue(
+      page([
+        {
+          id: 41,
+          booking_id: 51,
+          amount: '10000',
+          due_date: '2030-01-10',
+          student_name: 'Tolu Kareem',
+          student_id: 7,
+          class_name: 'Python for Beginners',
+          class_id: 4,
+        },
+      ]),
+    );
+    api.remindBooking.mockResolvedValue({ sent: true });
+
+    renderPage(<ClassDetailApp />);
+    fireEvent.click(await screen.findByRole('tab', { name: 'Payments' }));
+
+    expect(await screen.findByTitle('this-class-payment')).toBeInTheDocument();
+    expect(screen.queryByTitle('other-class-payment')).not.toBeInTheDocument();
+    expect(
+      screen.getByText('Payments are matched by class ID, so classes with the same name stay separate.'),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Send payment reminder to Tolu Kareem' }));
+    expect(api.remindBooking).toHaveBeenCalledWith(51);
+    expect(await screen.findByText('Reminder sent to Tolu Kareem.')).toBeInTheDocument();
+    expect(
+      screen.getByText('Each instalment is linked to its booking. Send a payment reminder here or from the Students tab.'),
+    ).toBeInTheDocument();
+  });
+
   it('pre-ticks attendance saved on an earlier visit', async () => {
     const pastSession = {
       id: 12,

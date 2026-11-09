@@ -69,45 +69,64 @@ export function SharePanel({ url, title, slug, startsLine, id }: SharePanelProps
     }
   }
 
+  async function handleMore() {
+    if (!navigator.share) {
+      await handleCopy();
+      return;
+    }
+
+    try {
+      await navigator.share({ title, text: message, url });
+      setNotice(null);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return;
+      setNotice('Could not open the share menu. Copy the link instead.');
+    }
+  }
+
   const message = classShareMessage(title, startsLine, url);
   const displayUrl = url.replace(/^https?:\/\//, '');
 
   return (
     <section className="booking-share-panel booking-fade-up" id={id} aria-label="Share this class">
-      {qr ? (
-        <div
-          className="booking-qr"
-          role="img"
-          aria-label="QR code for this booking page"
-          dangerouslySetInnerHTML={{ __html: qr }}
-        />
-      ) : (
-        <div className="booking-qr-placeholder" role="status">
-          {qrFailed ? 'QR unavailable' : 'Preparing QR…'}
-        </div>
-      )}
-
-      <div className="booking-share-body">
-        <div>
-          <div className="booking-share-title">Know someone who would love this?</div>
+      <div className="booking-share-details">
+        {qr ? (
+          <div
+            className="booking-qr"
+            role="img"
+            aria-label="QR code for this booking page"
+            dangerouslySetInnerHTML={{ __html: qr }}
+          />
+        ) : (
+          <div className="booking-qr-placeholder" role="status">
+            {qrFailed ? 'QR unavailable' : 'Preparing QR…'}
+          </div>
+        )}
+        <div className="booking-share-body">
+          <div className="booking-share-title">Scan to book</div>
           <div className="booking-share-link">{displayUrl}</div>
         </div>
+      </div>
+      <div className="booking-share-content">
         <div className="booking-share-actions">
-          <button type="button" className="booking-btn booking-btn-dark booking-btn-small" onClick={() => void handleCopy()}>
+          <button type="button" className="booking-share-action booking-share-copy" onClick={() => void handleCopy()}>
             <CopyIcon />
-            {copied ? 'Link copied' : 'Copy link'}
+            {copied ? 'Copied' : 'Copy link'}
           </button>
           <a
-            className="booking-btn booking-btn-outline-whatsapp booking-btn-small"
+            className="booking-share-action booking-share-whatsapp"
             href={`https://wa.me/?text=${encodeURIComponent(message)}`}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             WhatsApp
           </a>
+          <button type="button" className="booking-share-action booking-share-more" onClick={() => void handleMore()}>
+            More
+          </button>
           <button
             type="button"
-            className="booking-btn booking-btn-outline booking-btn-small"
+            className="booking-share-action booking-share-more"
             onClick={() => void handleDownload()}
             disabled={downloading || !qr}
             aria-busy={downloading}

@@ -126,11 +126,14 @@ button {
 .pricing-brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 800;
-  font-size: 18px;
-  letter-spacing: -0.02em;
-  min-height: 44px;
+  min-height: 52px;
+}
+
+.pricing-brand img {
+  display: block;
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
 }
 
 .pricing-nav {
@@ -841,8 +844,14 @@ button {
 
 @media (max-width: 720px) {
   .pricing-topbar-inner {
-    padding: 10px 16px;
+    padding: 8px 16px;
     gap: 10px;
+  }
+
+  .pricing-brand,
+  .pricing-brand img {
+    width: 48px;
+    height: 48px;
   }
 
   .pricing-nav {
@@ -901,10 +910,6 @@ button {
 }
 
 @media (max-width: 400px) {
-  .pricing-brand span {
-    display: none;
-  }
-
   .pricing-topbar-actions .pricing-btn-quiet {
     display: none;
   }

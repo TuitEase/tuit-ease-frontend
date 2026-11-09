@@ -19,6 +19,7 @@ import {
 } from './model';
 import { formatMoney, toNaira } from '../lib/money';
 import { CalendarIcon, CheckCircle } from './components/icons';
+import { BrandLogo } from './components/BrandLogo';
 import { Seo } from './components/Seo';
 
 const CONFIRM_TIMEOUT_MS = 30_000;
@@ -113,12 +114,7 @@ export function ReturnPage() {
 
       <header className="booking-hostbar">
         <div className="booking-hostbar-inner">
-          <span className="booking-brand">
-            <span className="booking-brand-mark" aria-hidden="true">
-              T
-            </span>
-            TuitEase
-          </span>
+          <BrandLogo className="booking-brand-header" />
         </div>
       </header>
 

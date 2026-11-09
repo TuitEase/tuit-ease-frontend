@@ -80,4 +80,42 @@ describe('MessagesPage', () => {
     expect(messagesApi.fetchMessageClasses).toHaveBeenCalled();
     expect(screen.getByRole('button', { name: /Send to/ })).toBeDisabled();
   });
+
+  it('explains when a live class has no students to receive an announcement', async () => {
+    messagesApi.fetchMessageClasses.mockResolvedValueOnce([{
+      id: 8,
+      title: 'Python Basics',
+      status: 'live',
+      seats: { booked: 0, waitlist: 0 },
+      message_audience: { students: 0, waiting_list: 0 },
+    }]);
+
+    renderPage();
+
+    expect(await screen.findByText('This class has no active students, so an announcement cannot be sent.'))
+      .toBeInTheDocument();
+    expect(messagesApi.fetchAnnouncementPreview).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: 'Send to 0' })).toBeDisabled();
+  });
+
+  it('presents message delivery stats as responsive, accessible metric cards', async () => {
+    messagesApi.fetchMessageSummary.mockResolvedValueOnce({
+      needs_attention: 2,
+      sent_today: 18,
+      daily_limit: 250,
+      messages_remaining: 232,
+      sent_percent_30d: 96,
+      scheduled: 4,
+      delivery_metric_note: 'Provider accepted.',
+    });
+
+    renderPage();
+
+    expect(await screen.findByText('Delivery rate')).toBeInTheDocument();
+    expect(screen.getByText('Messages sent')).toBeInTheDocument();
+    expect(screen.getByText('Scheduled')).toBeInTheDocument();
+    expect(screen.getByRole('progressbar', { name: 'Daily message limit used' }))
+      .toHaveAttribute('aria-valuenow', '7');
+    expect(screen.getByText('232 messages remaining today')).toBeInTheDocument();
+  });
 });

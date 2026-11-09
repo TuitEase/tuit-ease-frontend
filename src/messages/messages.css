@@ -1,4 +1,5 @@
 .messages-page {
+  width: 100%;
   min-height: 100vh;
   background: #f6f3ee;
   color: #16161a;
@@ -39,6 +40,7 @@
 }
 
 .messages-container {
+  box-sizing: border-box;
   display: flex;
   width: min(1240px, 100%);
   flex-direction: column;
@@ -83,6 +85,7 @@
 }
 
 .messages-input {
+  box-sizing: border-box;
   width: 100%;
   min-height: 48px;
   padding: 10px 14px;
@@ -100,51 +103,161 @@
 
 .messages-metrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 2px;
 }
 
 .message-metric {
   display: flex;
+  min-height: 176px;
   min-width: 0;
   flex-direction: column;
-  gap: 4px;
-  padding: 18px 20px;
-  border: 1px solid #e6e1d8;
-  border-radius: 18px;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 16px;
+  border: 1px solid #dfe5ed;
+  border-radius: 14px;
   background: #fff;
+  box-shadow: 0 2px 5px rgb(18 34 62 / 2%);
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.message-metric:hover {
+  box-shadow: 0 8px 20px rgb(18 34 62 / 7%);
+  transform: translateY(-2px);
 }
 
 .message-metric.is-attention {
   border-color: #f0c4b6;
-  background: #fff6f2;
+  box-shadow: inset 0 0 0 1px #f0c4b6;
 }
 
-.message-metric > span {
+.message-metric.is-clear {
+  border-color: #bfe0cc;
+}
+
+.message-metric-top {
+  display: flex;
+  width: 100%;
+  min-height: 36px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.message-metric-icon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 11px;
+  background: #f3f0ea;
+  color: #4a4a50;
+}
+
+.message-metric-icon svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.message-metric.is-attention .message-metric-icon {
+  background: #fdecec;
+  color: #9b1c1c;
+}
+
+.message-metric.is-clear .message-metric-icon {
+  background: #e8f6ee;
+  color: #14532d;
+}
+
+.message-metric.is-usage .message-metric-icon {
+  background: #fce9e2;
+  color: #a63a22;
+}
+
+.message-metric-period,
+.message-metric-status {
+  display: inline-flex;
+  min-height: 25px;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #f3f0ea;
   color: #5f5f66;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.message-metric-status.is-alert {
+  background: #fdecec;
+  color: #9b1c1c;
+}
+
+.message-metric-status.is-good {
+  background: #e8f6ee;
+  color: #14532d;
+}
+
+.message-metric-label {
+  color: #596a84;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .message-metric strong {
-  font-size: 26px;
+  color: #132342;
+  font-size: clamp(24px, 2.4vw, 30px);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
   line-height: 1.15;
   overflow-wrap: anywhere;
 }
 
+.message-metric-total {
+  color: #718098;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.message-metric-progress {
+  width: 100%;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #f0eee9;
+}
+
+.message-metric-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #cc4e32;
+  transition: width 0.2s ease;
+}
+
 .message-metric small {
   color: #6b6b72;
-  font-size: 13px;
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .message-metric-skeleton,
 .messages-empty {
   grid-column: 1 / -1;
   padding: 24px;
-  border: 1px solid #e6e1d8;
-  border-radius: 18px;
+  border: 1px solid #dfe5ed;
+  border-radius: 14px;
   background: #fff;
   color: #5f5f66;
   text-align: center;
@@ -661,9 +774,19 @@
 }
 
 .messages-preview-pill {
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 12px;
   font-size: 12px;
+}
+
+.messages-no-audience {
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid #e6e1d8;
+  border-radius: 12px;
+  background: #f3f0ea;
+  color: #4a4a50;
+  font-size: 14px;
 }
 
 .messages-how-card {
@@ -714,6 +837,10 @@
 }
 
 @media (max-width: 720px) {
+  .messages-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .messages-container {
     gap: 18px;
     padding: 22px 16px 48px;
@@ -753,6 +880,10 @@
 }
 
 @media (max-width: 380px) {
+  .messages-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .messages-container {
     padding-right: 12px;
     padding-left: 12px;

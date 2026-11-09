@@ -37,6 +37,7 @@ describe('ReturnPage', () => {
     render(<ReturnPage />);
 
     expect(await screen.findByRole('heading', { name: 'No booking to confirm' })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'TuitEase' })).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 

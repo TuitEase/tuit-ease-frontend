@@ -75,19 +75,8 @@ export function PricingPage() {
 
       <header className="pricing-topbar">
         <div className="pricing-topbar-inner">
-          <a className="pricing-brand" href="/">
-            <svg width="28" height="28" viewBox="0 0 30 30" role="img" aria-label="TuitEase logo">
-              <rect width="30" height="30" rx="9" fill="#DE6548" />
-              <path
-                d="M8 15.5l4.5 4.5L22 10"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span>TuitEase</span>
+          <a className="pricing-brand" href="/" aria-label="TuitEase home">
+            <img src="/assets/tuitease-logo.png" alt="TuitEase" />
           </a>
 
           <nav className="pricing-nav" aria-label="Pricing page">

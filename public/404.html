@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#F6F3EE" />
+    <title>Page not found | TuitEase</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+        color: #16161a;
+        background: #f6f3ee;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 24px;
+        display: grid;
+        place-items: center;
+      }
+
+      main {
+        width: min(100%, 480px);
+        padding: 36px 28px;
+        border: 1px solid #e6e1d8;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(22, 22, 26, 0.07);
+        text-align: center;
+      }
+
+      img {
+        width: 124px;
+        height: 124px;
+        object-fit: contain;
+      }
+
+      .code {
+        margin: 12px 0 4px;
+        color: #cc4e32;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(24px, 6vw, 32px);
+        letter-spacing: -0.03em;
+      }
+
+      p {
+        margin: 12px 0 24px;
+        color: #5f5f66;
+        line-height: 1.6;
+      }
+
+      a {
+        min-height: 48px;
+        padding: 0 20px;
+        border-radius: 12px;
+        background: #16161a;
+        color: #ffffff;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+      }
+
+      a:focus-visible {
+        outline: 3px solid #cc4e32;
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 420px) {
+        body {
+          padding: 16px;
+        }
+
+        main {
+          padding: 28px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/assets/tuitease-logo.png" alt="TuitEase" />
+      <p class="code">ERROR 404</p>
+      <h1>We can’t find that page</h1>
+      <p>The address may be incorrect, or the page may have moved. Let’s get you back to TuitEase.</p>
+      <a href="/">Go to homepage</a>
+    </main>
+  </body>
+</html>

@@ -1,4 +1,5 @@
 import { resolve } from 'node:path';
+import { readFile } from 'node:fs/promises';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 import type { Plugin } from 'vite';
@@ -11,33 +12,100 @@ const frontendRoot = __dirname;
  * keeps the public route working locally and in `vite preview`.
  */
 function publicBookingRoutes(): Plugin {
+  const appRoutes = new Set([
+    '/',
+    '/signup',
+    '/signin',
+    '/onboarding',
+    '/dashboard',
+    '/messages',
+    '/settings',
+    '/classes/new',
+    '/classes/new/basics',
+    '/classes/new/schedule',
+    '/classes/new/seats-and-price',
+    '/classes/new/review',
+    '/classes/new/published',
+    '/classes',
+    '/classes/detail',
+    '/students',
+    '/booking/complete',
+    '/pricing',
+    '/payments',
+  ]);
+
   const rewrite = (url: string | undefined): string | undefined => {
     if (!url) return url;
     const queryIndex = url.indexOf('?');
     const pathname = queryIndex === -1 ? url : url.slice(0, queryIndex);
     const query = queryIndex === -1 ? '' : url.slice(queryIndex);
+    const normalizedPath = pathname.replace(/\/+$/, '') || '/';
 
     if (/^\/class\/(?!index\.html$)[^/]+\/?$/.test(pathname)) {
       return `/class/index.html${query}`;
     }
+    if (/^\/pay\/[0-9a-f-]{36}\/?$/i.test(pathname)) {
+      return `/pay/index.html${query}`;
+    }
     if (pathname === '/booking/complete' || pathname === '/booking/complete/') {
       return `/booking/complete/index.html${query}`;
     }
+    if (pathname === '/payments' || pathname === '/payments/') {
+      return `/payments/index.html${query}`;
+    }
+    if (
+      !appRoutes.has(normalizedPath) &&
+      !/^\/class\/[^/]+$/.test(normalizedPath) &&
+      !normalizedPath.startsWith('/api/') &&
+      !normalizedPath.startsWith('/@') &&
+      !/\.[^/]+$/.test(normalizedPath)
+    ) {
+      return `/404.html${query}`;
+    }
     return url;
+  };
+
+  const routeRequest = (
+    req: { url?: string; method?: string },
+    res: {
+      statusCode: number;
+      setHeader: (name: string, value: string) => unknown;
+      end: (body?: Uint8Array) => unknown;
+    },
+    next: (error?: Error) => void,
+    notFoundFile: string,
+  ) => {
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      next();
+      return;
+    }
+    const originalUrl = req.url;
+    const rewrittenUrl = rewrite(originalUrl);
+    if (rewrittenUrl !== originalUrl && rewrittenUrl?.startsWith('/404.html')) {
+      void readFile(notFoundFile).then(
+        (page) => {
+          res.statusCode = 404;
+          res.setHeader('Content-Type', 'text/html; charset=utf-8');
+          res.end(req.method === 'HEAD' ? undefined : page);
+        },
+        next,
+      );
+      return;
+    }
+    req.url = rewrittenUrl;
+    next();
   };
 
   return {
     name: 'tuitease-public-booking-routes',
     configureServer(server) {
-      server.middlewares.use((req, _res, next) => {
-        req.url = rewrite(req.url);
-        next();
+      server.middlewares.use((req, res, next) => {
+        routeRequest(req, res, next, resolve(frontendRoot, 'public', '404.html'));
       });
     },
     configurePreviewServer(server) {
-      server.middlewares.use((req, _res, next) => {
-        req.url = rewrite(req.url);
-        next();
+      server.middlewares.use((req, res, next) => {
+        routeRequest(req, res, next, resolve(frontendRoot, 'dist', '404.html'));
       });
     },
   };
@@ -78,7 +146,9 @@ export default defineConfig({
         students: resolve(frontendRoot, 'students/index.html'),
         bookingClass: resolve(frontendRoot, 'class/index.html'),
         bookingComplete: resolve(frontendRoot, 'booking/complete/index.html'),
+        paymentLink: resolve(frontendRoot, 'pay/index.html'),
         pricing: resolve(frontendRoot, 'pricing/index.html'),
+        payments: resolve(frontendRoot, 'payments/index.html'),
       },
     },
   },

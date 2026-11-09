@@ -107,6 +107,7 @@ function makeStudent(overrides: Partial<ClassStudent> = {}): ClassStudent {
 function makePending(overrides: Partial<PendingInstallment> = {}): PendingInstallment {
   return {
     id: 1,
+    booking_id: 1,
     amount: '5000.00',
     due_date: '2026-10-01',
     student_name: 'Tolu Kareem',

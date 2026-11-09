@@ -379,11 +379,7 @@ export default function DashboardPage() {
     <div className="dashboard-shell">
       <aside className={`dashboard-sidebar${sidebarOpen ? ' is-open' : ''}`}>
         <a className="dashboard-brand" href="/dashboard/" aria-label="TuitEase dashboard">
-          <svg width="28" height="28" viewBox="0 0 30 30" role="img" aria-label="TuitEase logo">
-            <rect width="30" height="30" rx="9" fill="#CC4E32" />
-            <path d="M8 15.5l4.5 4.5L22 10" fill="none" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span>TuitEase</span>
+          <img src="/assets/tuitease-logo.png" alt="TuitEase main logo" />
         </a>
         <nav className="dashboard-nav" aria-label="Primary navigation">
           <a href="/dashboard/" className="is-active" aria-current="page" onClick={() => setSidebarOpen(false)}>
@@ -398,7 +394,7 @@ export default function DashboardPage() {
           <a href="/messages/" onClick={() => setSidebarOpen(false)}>
             <NavIcon name="messages" />Messages
           </a>
-          <a href="/dashboard/#payments" onClick={() => setSidebarOpen(false)}>
+          <a href="/payments/" onClick={() => setSidebarOpen(false)}>
             <NavIcon name="payments" />Payments
           </a>
           <a href="/settings/" onClick={() => setSidebarOpen(false)}>

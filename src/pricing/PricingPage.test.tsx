@@ -41,6 +41,8 @@ describe('PricingPage', () => {
 
     render(<PricingPage />);
 
+    expect(screen.getByRole('link', { name: 'TuitEase home' })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('img', { name: 'TuitEase' })).toHaveAttribute('src', '/assets/tuitease-logo.png');
     expect(screen.getByText('Loading the current platform fee…')).toBeInTheDocument();
 
     expect((await screen.findAllByText('4%')).length).toBeGreaterThan(0);

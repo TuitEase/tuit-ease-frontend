@@ -26,6 +26,7 @@ import {
 import { publicBaseUrl } from '../createClass/format';
 import { formatMoney } from '../lib/money';
 import { ClassColumn } from './components/ClassColumn';
+import { BrandLogo } from './components/BrandLogo';
 import { BookingPanel, type BookingFormValues, type PanelStep, type WaitlistFormValues } from './components/BookingPanel';
 import { Seo } from './components/Seo';
 import { SharePanel } from './components/SharePanel';
@@ -376,36 +377,36 @@ export function BookingPage() {
       {view ? (
         <header className="booking-hostbar">
           <div className="booking-hostbar-inner">
-            <div className="booking-host">
-              <div className="booking-avatar" aria-hidden="true">
-                {view.host.initials}
-              </div>
-              <div className="booking-host-names">
-                <span className="booking-host-name">{view.host.name}</span>
-                <span className="booking-host-role">Booking page</span>
+            <div className="booking-header-identity">
+              <BrandLogo className="booking-brand-header" />
+              <span className="booking-host-divider" aria-hidden="true" />
+              <div className="booking-host booking-host-feature">
+                <div className="booking-avatar" aria-hidden="true">
+                  {view.host.initials}
+                </div>
+                <div className="booking-host-names">
+                  <span className="booking-host-role">YOUR CLASS HOST</span>
+                  <span className="booking-host-name">{view.host.name}</span>
+                </div>
               </div>
             </div>
             <button
               type="button"
               className="booking-share-toggle"
+              aria-label="Share this class"
+              title="Share this class"
               aria-expanded={shareOpen}
               aria-controls="booking-share-panel"
               onClick={() => setShareOpen((open) => !open)}
             >
-              <ShareIcon />
-              Share
+              <ShareIcon color="#FFFFFF" />
             </button>
           </div>
         </header>
       ) : (
         <header className="booking-hostbar">
           <div className="booking-hostbar-inner">
-            <span className="booking-brand">
-              <span className="booking-brand-mark" aria-hidden="true">
-                T
-              </span>
-              TuitEase
-            </span>
+            <BrandLogo className="booking-brand-header" />
           </div>
         </header>
       )}
@@ -431,12 +432,7 @@ export function BookingPage() {
       {stage === 'not-found' && (
         <div className="booking-empty">
           <div className="booking-empty-card">
-            <span className="booking-brand">
-              <span className="booking-brand-mark" aria-hidden="true">
-                T
-              </span>
-              TuitEase
-            </span>
+            <BrandLogo />
             <h1 className="booking-empty-title">This class could not be found</h1>
             <p className="booking-empty-copy">
               The link may be wrong, or the host has taken this class down. Ask them for a fresh link.
@@ -453,12 +449,7 @@ export function BookingPage() {
       {stage === 'error' && (
         <div className="booking-empty">
           <div className="booking-empty-card">
-            <span className="booking-brand">
-              <span className="booking-brand-mark" aria-hidden="true">
-                T
-              </span>
-              TuitEase
-            </span>
+            <BrandLogo />
             <h1 className="booking-empty-title">We could not load this class</h1>
             <p className="booking-empty-copy">{loadError ?? PUBLIC_OFFLINE_MESSAGE}</p>
             <div className="booking-empty-actions">

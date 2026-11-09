@@ -263,6 +263,8 @@ export interface ClassStudent {
 
 export interface PaymentRow {
   id: number;
+  booking_id: number;
+  class_id: number;
   amount: Money;
   status: string;
   method: string;
@@ -274,6 +276,7 @@ export interface PaymentRow {
 
 export interface PendingInstallment {
   id: number;
+  booking_id: number;
   amount: Money;
   due_date: string;
   student_name: string;

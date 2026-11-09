@@ -1,12 +1,12 @@
 const INK = '#16161A';
 
-export function ShareIcon() {
+export function ShareIcon({ color = INK }: { color?: string } = {}) {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-      <circle cx="4" cy="9" r="2.2" fill="none" stroke={INK} strokeWidth="1.6" />
-      <circle cx="13.5" cy="4" r="2.2" fill="none" stroke={INK} strokeWidth="1.6" />
-      <circle cx="13.5" cy="14" r="2.2" fill="none" stroke={INK} strokeWidth="1.6" />
-      <path d="M6 8l5.5-3M6 10l5.5 3" fill="none" stroke={INK} strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="4" cy="9" r="2.2" fill="none" stroke={color} strokeWidth="1.6" />
+      <circle cx="13.5" cy="4" r="2.2" fill="none" stroke={color} strokeWidth="1.6" />
+      <circle cx="13.5" cy="14" r="2.2" fill="none" stroke={color} strokeWidth="1.6" />
+      <path d="M6 8l5.5-3M6 10l5.5 3" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   );
 }

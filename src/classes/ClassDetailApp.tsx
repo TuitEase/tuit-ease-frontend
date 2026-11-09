@@ -489,6 +489,8 @@ export default function ClassDetailApp() {
                     void paymentsQuery.refetch();
                     void pendingQuery.refetch();
                   }}
+                  onRemind={(bookingId, studentName) => void handleRemind(bookingId, studentName)}
+                  remindingId={remindingId}
                 />
               ) : null}
 

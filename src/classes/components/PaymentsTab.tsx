@@ -17,6 +17,8 @@ export interface PaymentsTabProps {
   paymentsError?: string;
   pendingError?: string;
   onRetry: () => void;
+  onRemind: (bookingId: number, studentName: string) => void;
+  remindingId: number | null;
 }
 
 function methodLabel(method: string): string {
@@ -42,6 +44,8 @@ export function PaymentsTab({
   paymentsError,
   pendingError,
   onRetry,
+  onRemind,
+  remindingId,
 }: PaymentsTabProps) {
   const aggregates = studentAggregates(students);
   const pendingInfo = pendingForClass(pending, cls.id, timeZone);
@@ -49,7 +53,7 @@ export function PaymentsTab({
     .filter((row) => row.class_id === cls.id)
     .sort((a, b) => String(a.due_date).localeCompare(String(b.due_date)));
   const classPayments = payments
-    .filter((row) => row.class_name.trim().toLowerCase() === cls.title.trim().toLowerCase())
+    .filter((row) => row.class_id === cls.id)
     .sort((a, b) => {
       const left = a.paid_at ? new Date(a.paid_at).getTime() : 0;
       const right = b.paid_at ? new Date(b.paid_at).getTime() : 0;
@@ -143,10 +147,7 @@ export function PaymentsTab({
                 </table>
               </div>
             )}
-            <p className="tt-hint">
-              The payments API does not include a class id, so this list matches on the class name. Two classes with the
-              same name cannot be told apart here yet.
-            </p>
+            <p className="tt-hint">Payments are matched by class ID, so classes with the same name stay separate.</p>
           </Section>
 
           <Section title="Still to come" id="pending-instalments">
@@ -170,7 +171,7 @@ export function PaymentsTab({
                       <th scope="col">Amount</th>
                       <th scope="col">State</th>
                       <th scope="col">
-                        <span className="tt-sr-only">Student page</span>
+                        <span className="tt-sr-only">Actions</span>
                       </th>
                     </tr>
                   </thead>
@@ -188,9 +189,23 @@ export function PaymentsTab({
                           </td>
                           <td>{overdue ? <Pill tone="warning">Overdue</Pill> : <Pill tone="neutral">Scheduled</Pill>}</td>
                           <td>
-                            <a className="tt-btn tt-btn-ghost tt-btn-small" href={studentUrl(row.student_id)}>
-                              View
-                            </a>
+                            <div className="tt-row-actions">
+                              {!ended ? (
+                                <button
+                                  type="button"
+                                  className="tt-btn tt-btn-ghost tt-btn-small"
+                                  onClick={() => onRemind(row.booking_id, row.student_name)}
+                                  disabled={remindingId === row.booking_id}
+                                  aria-busy={remindingId === row.booking_id}
+                                  aria-label={`Send payment reminder to ${row.student_name}`}
+                                >
+                                  {remindingId === row.booking_id ? 'Sending…' : 'Remind'}
+                                </button>
+                              ) : null}
+                              <a className="tt-btn tt-btn-ghost tt-btn-small" href={studentUrl(row.student_id, cls.id)}>
+                                View
+                              </a>
+                            </div>
                           </td>
                         </tr>
                       );
@@ -200,7 +215,7 @@ export function PaymentsTab({
               </div>
             )}
             <p className="tt-hint">
-              Pending instalments do not include a booking id, so the reminder button lives on the Students tab.
+              Each instalment is linked to its booking. Send a payment reminder here or from the Students tab.
             </p>
           </Section>
         </div>
