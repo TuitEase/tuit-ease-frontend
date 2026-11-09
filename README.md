@@ -42,7 +42,7 @@ The multi-page app includes:
 - `/dashboard/`, `/classes/`, `/students/`, `/messages/`, `/payments/`, `/settings/`: host workspace
 - `/class/<slug>/`, `/booking/complete/`, `/pay/<booking-uuid>/`: public class and booking flows
 
-The Vite configuration supports public class and payment routes during development and preview. Production hosting must serve the built app's route entry points and apply the rewrites described in the repository [README](../README.md).
+The Vite configuration supports public class and payment routes during development and preview. For Vercel deployments with `frontend/` as the project root, `vercel.json` rewrites `/class/<slug>/` and `/pay/<booking-uuid>/` to their built entry points. If the Vercel project uses the repository root instead, configure its root directory as `frontend` or move the deployment config to the project root. Other production hosts must provide equivalent rewrites.
 
 ## Build and tests
 

@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/class/:slug",
+      "destination": "/class/index.html"
+    },
+    {
+      "source": "/class/:slug/",
+      "destination": "/class/index.html"
+    },
+    {
+      "source": "/pay/:bookingId",
+      "destination": "/pay/index.html"
+    },
+    {
+      "source": "/pay/:bookingId/",
+      "destination": "/pay/index.html"
+    }
+  ]
+}
