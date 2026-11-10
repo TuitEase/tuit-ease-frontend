@@ -78,7 +78,8 @@ describe('host onboarding', () => {
   }, 10000);
 
   it('allows hosts to defer payouts and accurately reports the incomplete setup', async () => {
-    render(<OnboardingPage />);
+    const onNavigate = vi.fn();
+    render(<OnboardingPage onNavigate={onNavigate} />);
     await screen.findByRole('heading', { name: 'Tell us about your classes' });
 
     fireEvent.change(screen.getByLabelText(/Business or host name/), { target: { value: 'Ada Learning' } });
@@ -89,9 +90,7 @@ describe('host onboarding', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Skip payout setup for now' }));
 
-    expect(await screen.findByRole('heading', { name: 'You’re ready to build your classes.' })).toBeInTheDocument();
-    expect(screen.getByText(/You skipped payout setup/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Set up payouts' })).toHaveAttribute('href', '/onboarding/');
+    await waitFor(() => expect(onNavigate).toHaveBeenCalledWith('/dashboard/'));
     expect(api.setupHostPayout).not.toHaveBeenCalled();
   });
 

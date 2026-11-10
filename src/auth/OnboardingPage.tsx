@@ -280,8 +280,8 @@ export default function OnboardingPage({ onNavigate }: OnboardingPageProps = {})
   };
 
   const finishWithoutPayout = () => {
-    setPayoutSkipped(!host?.payout_ready);
-    setCompleted(true);
+    if (onNavigate) onNavigate('/dashboard/');
+    else window.location.assign('/dashboard/');
   };
 
   if (loading) {
